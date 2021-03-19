@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use App\Entity\City;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -20,6 +21,12 @@ final class Version20210319102102 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
+
+        $city = new City();
+        $city->setName('Marrakech');
+        $city->setZipcode('40014');
+
+        $this->addSql('INSERT INTO city (name, zip_code) VALUE (:name, :zipCode)', array('name' => 'Marrakech', 'zipCode' => '40014'));
 
     }
 
