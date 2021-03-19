@@ -28,7 +28,7 @@ class Review
     private $rating;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime")
      */
     private $created_at;
 
@@ -41,6 +41,15 @@ class Review
      * @ORM\ManyToOne(targetEntity=Restaurant::class, inversedBy="reviews")
      */
     private $restaurant_id;
+
+    /**
+     * Review constructor.
+     * @param $id
+     */
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+    }
 
     public function getId(): ?int
     {
@@ -106,4 +115,5 @@ class Review
 
         return $this;
     }
+
 }

@@ -30,7 +30,7 @@ class Restaurant
     private $description;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime")
      */
     private $created_at;
 
@@ -53,6 +53,7 @@ class Restaurant
     {
         $this->reviews = new ArrayCollection();
         $this->restaurantPictures = new ArrayCollection();
+        $this->setCreatedAt(new \DateTime());
     }
 
     public function getId(): ?int
