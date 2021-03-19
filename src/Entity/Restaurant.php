@@ -24,7 +24,7 @@ class Restaurant
      */
     private $name;
 
-    /**
+    /**00
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
