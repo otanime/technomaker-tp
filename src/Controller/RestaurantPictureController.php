@@ -17,7 +17,7 @@ class RestaurantPictureController extends AbstractController
 
     public function __construct(RestaurantPictureRepository $restaurantPictureRepository, EntityManagerInterface $entityManager)
     {
-        $this->$restaurantPictureRepository = $restaurantPictureRepository;
+        $this->restaurantPictureRepository = $restaurantPictureRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -43,7 +43,7 @@ class RestaurantPictureController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route("/restaurantPictures", name="restaurantPictures.list", methods={"POST"})
+     * @Route("/restaurantPictures", name="restaurantPictures.add", methods={"POST"})
      *
      */
     public function add(Request $request): Response
@@ -69,7 +69,7 @@ class RestaurantPictureController extends AbstractController
      * @Route("/restaurantPictures/{id}", name="restaurantPictures.get", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
-    public function get(int $id): Response
+    public function show(int $id): Response
     {
         $restaurantPicture = $this->restaurantPictureRepository->findOneBy(['id' => $id]);
 
@@ -113,7 +113,7 @@ class RestaurantPictureController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/restaurantPictures/{id}", name="restaurantPictures.list", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/restaurantPictures/{id}", name="restaurantPictures.delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response

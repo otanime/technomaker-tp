@@ -17,7 +17,7 @@ class ReviewController extends AbstractController
 
     public function __construct(ReviewRepository $reviewRepository, EntityManagerInterface $entityManager)
     {
-        $this->$reviewRepository = $reviewRepository;
+        $this->reviewRepository = $reviewRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -43,7 +43,7 @@ class ReviewController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route("/reviews", name="reviews.list", methods={"POST"})
+     * @Route("/reviews", name="reviews.add", methods={"POST"})
      *
      */
     public function add(Request $request): Response
@@ -71,7 +71,7 @@ class ReviewController extends AbstractController
      * @Route("/reviews/{id}", name="reviews.get", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
-    public function get(int $id): Response
+    public function show(int $id): Response
     {
         // $review = $this->reviewRepository->find($id);
         $review = $this->reviewRepository->findOneBy(['id' => $id]);
@@ -118,7 +118,7 @@ class ReviewController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/reviews/{id}", name="reviews.list", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/reviews/{id}", name="reviews.delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response

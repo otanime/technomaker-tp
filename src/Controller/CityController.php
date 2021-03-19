@@ -17,7 +17,7 @@ class CityController extends AbstractController
 
     public function __construct(CityRepository $cityRepository, EntityManagerInterface $entityManager)
     {
-        $this->$cityRepository = $cityRepository;
+        $this->cityRepository = $cityRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -43,7 +43,7 @@ class CityController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cities", name="cities.list", methods={"POST"})
+     * @Route("/cities", name="cities.add", methods={"POST"})
      *
      */
     public function add(Request $request): Response
@@ -70,7 +70,7 @@ class CityController extends AbstractController
      * @Route("/cities/{id}", name="cities.get", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
-    public function get(int $id): Response
+    public function show(int $id): Response
     {
         // $city = $this->cityRepository->find($id);
         $city = $this->cityRepository->findOneBy(['id' => $id]);
@@ -115,7 +115,7 @@ class CityController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/cities/{id}", name="cities.list", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/cities/{id}", name="cities.delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response

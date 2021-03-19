@@ -18,7 +18,7 @@ class UserController extends AbstractController
 
     public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
-        $this->$userRepository = $userRepository;
+        $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -44,7 +44,7 @@ class UserController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route("/users", name="users.list", methods={"POST"})
+     * @Route("/users", name="users.add", methods={"POST"})
      *
      */
     public function add(Request $request): Response
@@ -71,7 +71,7 @@ class UserController extends AbstractController
      * @Route("/users/{id}", name="users.get", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
-    public function get(int $id): Response
+    public function show(int $id): Response
     {
         // $user = $this->userRepository->find($id);
         $user = $this->userRepository->findOneBy(['id' => $id]);
@@ -116,7 +116,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/users/{id}", name="users.list", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/users/{id}", name="users.delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response

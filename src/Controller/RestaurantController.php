@@ -17,7 +17,7 @@ class RestaurantController extends AbstractController
 
     public function __construct(RestaurantRepository $restaurantRepository, EntityManagerInterface $entityManager)
     {
-        $this->$restaurantRepository = $restaurantRepository;
+        $this->restaurantRepository = $restaurantRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -43,7 +43,7 @@ class RestaurantController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route("/restaurants", name="restaurants.list", methods={"POST"})
+     * @Route("/restaurants", name="restaurants.add", methods={"POST"})
      *
      */
     public function add(Request $request): Response
@@ -67,10 +67,10 @@ class RestaurantController extends AbstractController
     /**
      * @param int $id
      * @return Response
-     * @Route("/restaurants/{id}", name="restaurants.get", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/restaurants/{id}", name="restaurants.show", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
-    public function get(int $id): Response
+    public function show(int $id): Response
     {
         // $restaurant = $this->restaurantRepository->find($id);
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
@@ -116,7 +116,7 @@ class RestaurantController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/restaurants/{id}", name="restaurants.list", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/restaurants/{id}", name="restaurants.delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response
