@@ -69,9 +69,9 @@ class RestaurantRepository extends ServiceEntityRepository
             ->where("r.id = $id")
             ->orderBy('r.created_at', 'DESC');
 
-        $query = $qb->getQuery()->getSingleScalarResult();
+        $rating = $qb->getQuery()->getSingleScalarResult();
 
-        return $query;
+        return $rating;
 
     }
 
