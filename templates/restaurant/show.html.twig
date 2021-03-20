@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Animals{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+        .isla-title { text-transform: uppercase; text-align: center; background-color: #2f3640; color: #fff; padding: 20px; }
+        .isla-btn-edit-fly {background-color: #16a085;color: #fff;list-style: none;text-decoration: none;padding: 18px 25px;border-radius: 50%;font-weight: bold;position: absolute;right: 25px;top: 100px;}
+        .isla-table {width: 1024px;margin: auto;text-transform: uppercase;letter-spacing: 2px;font-size: 14px;border: 1px solid #0001;}
+        .isla-table thead {background-color: #353b48;color: #fff;}
+        .isla-msg {text-align: center;margin: 50px;padding: 50px;background-color: #dcdde1;letter-spacing: 2px;text-transform: uppercase;color: #2f3640;}
+        .isla-flash-success {background-color: #16a085;color: #fff;width: max-content;padding: 10px 50px;position: absolute;bottom: 50px;left: 16px;text-transform: uppercase;letter-spacing: 2px;}
+        .isla-section {width: 1324px;margin: auto;padding: 50px;text-transform: uppercase;letter-spacing: 2px;}
+        .isla-title-h3 {text-align: center;font-size: 14px;background-color: white;padding: 20px;color: #2f3640;font-weight: bold;border: 1px solid;width: max-content;margin: 10px auto;}
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+
+    <h1 class="isla-title">{{ ControllerName }} </h1>
+
+    <a href="{{ path('restaurants.update', {'id' : restaurant.id}) }}" class="isla-btn-edit-fly">E</a>
+
+    <section class="isla-section">
+        <form>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">nom</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" value="{{ restaurant.name }}" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">ville</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" value="{{ restaurant.getCityId.name | default("-") }}" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">description</label>
+                <div class="col-sm-10">
+                    <textarea  type="text" class="form-control" readonly>{{ restaurant.getDescription }}</textarea>
+                </div>
+            </div>
+
+        </form>
+    </section>
+
+    <section class="isla-section">
+        <h2 class="isla-title">{{ 'reviews' | upper }}</h2>
+
+        {% if (restaurant.reviews | length) %}
+
+            <h3 class="isla-title-h3">la valeur moyenne de la note : {{ rating | number_format }}</h3>
+
+            <table class="table isla-table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">utilisateur</th>
+                    <th scope="col">message</th>
+                    <th scope="col">rating</th>
+                    <th scope="col">créer le</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for key, review in restaurant.reviews %}
+                    <tr>
+                        <th scope="row">{{ review.id }}</th>
+                        <td>{{ review.getUserId.username }}</td>
+                        <td>{{ review.message | default("-") }}</td>
+                        <td>{{ review.rating | default("-") }}</td>
+                        <td>{{ review.getCreatedAt | date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <h2 class="isla-msg">list des reviews est vide</h2>
+        {% endif %}
+    </section>
+
+
+{% endblock %}

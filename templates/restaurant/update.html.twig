@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Animals{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+        .isla-title { text-transform: uppercase; text-align: center; background-color: #2f3640; color: #fff; padding: 20px; }
+        .isla-btn-add { background-color: #fff; padding: 5px; color: #2f3640; border-radius: 50%; display: inline-block; width: 50px; height: 50px; line-height: 1; cursor: pointer; float: right; }
+        .isla-modal .modal-body {padding: 20px 50px;text-transform: uppercase;letter-spacing: 2px;font-size: 14px;}
+        .modal-header {background-color: #2f3640;text-transform: uppercase;letter-spacing: 2px;font-weight: 900;color: #fff;}
+        .btn.isla-btn {background-color: #2f3640;color: #fff;text-transform: uppercase;letter-spacing: 2px;border-radius: 0;}
+        .isla-table {width: 1024px;margin: auto;text-transform: uppercase;letter-spacing: 2px;font-size: 14px;border: 1px solid #0001;}
+        .isla-table thead {background-color: #353b48;color: #fff;}
+        .isla-msg {text-align: center;margin: 50px;padding: 50px;background-color: #dcdde1;letter-spacing: 2px;text-transform: uppercase;color: #2f3640;}
+        .isla-flash-success {background-color: #16a085;color: #fff;width: max-content;padding: 10px 50px;position: absolute;bottom: 50px;left: 16px;text-transform: uppercase;letter-spacing: 2px;}
+        .isla-section {width: 1324px;margin: auto;padding: 50px;text-transform: uppercase;letter-spacing: 2px;}
+        .isla-btn.isla-an {background-color: #e3822c;}
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+
+    <h1 class="isla-title">{{ ControllerName }}</h1>
+
+    <section class="isla-section">
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+            {{ form_start(form) }}
+            <div>
+                {{ form_errors(form) }}
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.name) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.city_id) }}
+                </div>
+            </div>
+            {{ form_row(form.description) }}
+            {{ form_row(form.enregistrer, {'attr': {'class': 'isla-btn'}}) }}
+
+            {{ form_end(form) }}
+
+            <a href="{{ path('restaurants.show', {'id' : restaurant.id}) }}" class="btn isla-btn isla-an">Annuler</a>
+    </section>
+
+{% endblock %}

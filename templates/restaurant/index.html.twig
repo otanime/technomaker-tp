@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Restaurants{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+        .isla-title { text-transform: uppercase; text-align: center; background-color: #2f3640; color: #fff; padding: 20px; }
+        .isla-btn-add {background-color: #fff; padding: 5px; color: #2f3640; border-radius: 50%; display: inline-block; width: 50px; height: 50px; line-height: 1; cursor: pointer; float: right; }
+        .isla-modal .modal-body {padding: 20px 50px;text-transform: uppercase;letter-spacing: 2px;font-size: 14px;}
+        .modal-header {background-color: #2f3640;text-transform: uppercase;letter-spacing: 2px;font-weight: 900;color: #fff;}
+        .btn.isla-btn {background-color: #2f3640;color: #fff;text-transform: uppercase;letter-spacing: 2px;border-radius: 0;}
+        .isla-table {width: 1334px;margin: auto;text-transform: uppercase;letter-spacing: 2px;font-size: 14px;border: 1px solid #0001;}
+        .isla-table thead {background-color: #353b48;color: #fff;}
+        .isla-msg {text-align: center;margin: 50px;padding: 50px;background-color: #dcdde1;letter-spacing: 2px;text-transform: uppercase;color: #2f3640;}
+        .isla-flash-success {background-color: #16a085;color: #fff;width: max-content;padding: 10px 50px;position: absolute;bottom: 50px;left: 16px;text-transform: uppercase;letter-spacing: 2px;}
+        .isla-table-btn {background-color: #353b48;color: #fff;text-decoration: none !important;cursor: pointer;padding: 8px 10px;border-radius: 50%;}
+        .isla-btn-show {background-color: #16a085;}
+        .isla-btn-edit {background-color: #a46a1f;}
+        .isla-btn-delete {background-color: #e43;}
+        .isla-table-top-btn {background-color: #2f3640;color: #fff;text-decoration: none !important;padding: 11px;margin: 30px;display: inline flow-root list-item;float: right;list-style: none;letter-spacing: 2px;text-transform: uppercase;}
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+
+    <h1 class="isla-title">{{ ControllerName }}
+        {% if isForLimit != true %}
+        <strong class="isla-btn-add" data-toggle="modal" data-target="#addModal">+</strong>
+        {% endif %}
+    </h1>
+
+
+    {% if restaurants %}
+        <table class="table isla-table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">nom</th>
+                <th scope="col">description</th>
+                <th scope="col">ville</th>
+                <th scope="col">nb des reviews</th>
+                <th scope="col">créer le</th>
+                <th scope="col">Action</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for key, restaurant in restaurants %}
+                <tr>
+                    <th scope="row">{{ restaurant.id }}</th>
+                    <td>{{ restaurant.name }}</td>
+                    <td>{{ restaurant.description | default("-") }}</td>
+                    <td>{{ restaurant.getCityId.name | default("-") }}</td>
+                    <td>{{ restaurant.reviews | length }} review(s)</td>
+                    <td>{{ restaurant.getCreatedAt | date }}</td>
+                    <td>
+                        <a href="{{ path('restaurants.show', {'id' : restaurant.id}) }}" class="isla-table-btn isla-btn-show">S</a>
+                        <a href="{{ path('restaurants.update', {'id' : restaurant.id}) }}" class="isla-table-btn isla-btn-edit">E</a>
+                        <a href="{{ path('restaurants.delete', {'id' : restaurant.id}) }}" class="isla-table-btn isla-btn-delete">D</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <h2 class="isla-msg">list des animaux est vide</h2>
+    {% endif %}
+
+
+    {% if isForLimit != true %}
+    <div class="modal fade isla-modal" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter une restaurante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% form_theme form 'bootstrap_4_layout.html.twig' %}
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    <div>
+                        {{ form_errors(form) }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            {{ form_row(form.name) }}
+                        </div>
+                        <div class="col">
+                            {{ form_row(form.city_id) }}
+                        </div>
+                    </div>
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.enregistrer, {'attr': {'class': 'isla-btn'}}) }}
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="isla-flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
+{% endblock %}

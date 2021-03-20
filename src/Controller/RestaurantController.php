@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Restaurant;
+use App\Form\RestaurantType;
 use App\Repository\RestaurantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RestaurantController extends AbstractController
@@ -15,10 +17,13 @@ class RestaurantController extends AbstractController
     private $restaurantRepository;
     private $entityManager;
 
-    public function __construct(RestaurantRepository $restaurantRepository, EntityManagerInterface $entityManager)
+    private $session;
+
+    public function __construct(RestaurantRepository $restaurantRepository, EntityManagerInterface $entityManager, SessionInterface $session)
     {
         $this->restaurantRepository = $restaurantRepository;
         $this->entityManager = $entityManager;
+        $this->session = $session;
     }
 
     /**
@@ -31,12 +36,15 @@ class RestaurantController extends AbstractController
     {
         $restaurants = $this->restaurantRepository->findAll();
 
-        if (!$restaurants) {
-            throw $this->createNotFoundException('Aucun résultat');
-        }
+        $restaurant = new Restaurant();
+        $form = $this->createForm(RestaurantType::class, $restaurant);
 
-        return $this->json([
+        return $this->render('restaurant/index.html.twig', [
+            'restaurant' => $restaurant,
+            'form' => $form->createView(),
+            'ControllerName' => 'Gestion des restaurants',
             'restaurants' => $restaurants,
+            'isForLimit' => false
         ]);
     }
 
@@ -48,19 +56,25 @@ class RestaurantController extends AbstractController
      */
     public function add(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
         $restaurant = new Restaurant();
 
-        empty($data['name']) ? true : $restaurant->setName($data['name']);
-        empty($data['description']) ? true : $restaurant->setDescription($data['description']);
-        empty($data['city']) ? true : $restaurant->setCityId($data['city']);
+        $form = $this->createForm(RestaurantType::class, $restaurant);
+        $form->handleRequest($request);
 
-        $this->entityManager->persist($restaurant);
-        $this->entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
 
-        return $this->json([
-            '$restaurant' => $restaurant,
-        ]);
+            $entityManager->persist($restaurant);
+            $entityManager->flush();
+
+            $this->session->getFlashBag()->add('success', 'Bien Ajouter');
+
+            return $this->redirectToRoute('restaurants.list');
+
+        }
+
+        $this->session->getFlashBag()->add('error', 'Probléme declanché');
+
     }
 
 
@@ -72,15 +86,19 @@ class RestaurantController extends AbstractController
      */
     public function show(int $id): Response
     {
-        // $restaurant = $this->restaurantRepository->find($id);
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
 
         if (!$restaurant) {
             throw $this->createNotFoundException('Aucun résultat');
         }
 
-        return $this->json([
+
+        $rating = $this->restaurantRepository->ratingAvg($id);
+
+        return $this->render('restaurant/show.html.twig', [
             'restaurant' => $restaurant,
+            'rating' => $rating,
+            'ControllerName' => 'Afficher les infos de '.$restaurant->getName(),
         ]);
     }
 
@@ -88,27 +106,33 @@ class RestaurantController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/restaurants/{id}", name="restaurants.update", methods={"PUT"}, requirements={"id"="\d+"})
+     * @Route("/restaurants/{id}/edit", name="restaurants.update", methods={"GET", "POST"}, requirements={"id"="\d+"})
      *
      */
     public function update(int $id, Request $request): Response
     {
+
         $restaurant = $this->restaurantRepository->findOneBy(['id' => $id]);
-        $data = json_decode($request->getContent(), true);
 
         if (!$restaurant) {
             throw $this->createNotFoundException('Aucun résultat');
         }
 
-        empty($data['name']) ? true : $restaurant->setName($data['name']);
-        empty($data['description']) ? true : $restaurant->setDescription($data['description']);
-        empty($data['city']) ? true : $restaurant->setCityId($data['city']);
+        $form = $this->createForm(RestaurantType::class, $restaurant);
+        $form->handleRequest($request);
 
-        $this->entityManager->persist($restaurant);
-        $this->entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-        return $this->json([
+            $this->session->getFlashBag()->add('success', 'Bien Modifier');
+
+            return $this->redirectToRoute('restaurants.show', array('id' => $id));
+        }
+
+        return $this->render('restaurant/update.html.twig', [
             'restaurant' => $restaurant,
+            'ControllerName' => 'modifier les infos de '.$restaurant->getName(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -116,7 +140,7 @@ class RestaurantController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
-     * @Route("/restaurants/{id}", name="restaurants.delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/restaurants/{id}/delete", name="restaurants.delete", methods={"GET"}, requirements={"id"="\d+"})
      *
      */
     public function delete(int $id, Request $request): Response
@@ -130,8 +154,76 @@ class RestaurantController extends AbstractController
         $this->entityManager->remove($restaurant);
         $this->entityManager->flush();
 
-        return $this->json([
-            'msg' => 'yes',
+        $this->session->getFlashBag()->add('success', 'Bien suuprimer');
+
+        return $this->redirectToRoute('restaurants.list');
+    }
+
+    /**
+     * @param int $limit
+     * @return Response
+     * @Route("/restaurants/limit/{limit}", name="restaurants.last", methods={"GET"})
+     *
+     */
+    public function getLast(int $limit): Response
+    {
+
+        if (!$limit)
+            throw $this->createNotFoundException("La valeur pour limiter l'affichage pas definie");
+
+        $restaurants = $this->restaurantRepository->lastRestaurants($limit);
+
+        if (!$restaurants)
+            throw $this->createNotFoundException('Aucun résultat');
+
+        return $this->render('restaurant/index.html.twig', [
+            'ControllerName' => "les $limit derniers restaurants créés",
+            'restaurants' => $restaurants,
+            'isForLimit' => true
+        ]);
+    }
+
+    /**
+     * @param int $limit
+     * @return Response
+     * @Route("/restaurants/top/{limit}", name="restaurants.top", methods={"GET"})
+     *
+     */
+    public function getTop(int $limit): Response
+    {
+
+        if (!$limit)
+            throw $this->createNotFoundException("La valeur pour limiter l'affichage pas definie");
+
+        $restaurants = $this->restaurantRepository->topRestaurant($limit);
+
+        if (!$restaurants)
+            throw $this->createNotFoundException('Aucun résultat');
+
+        return $this->render('restaurant/index.html.twig', [
+            'ControllerName' => "les $limit top meilleurs restaurants",
+            'restaurants' => $restaurants,
+            'isForLimit' => true
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @Route("/restaurants/by-rating", name="restaurants.rating", methods={"GET"})
+     *
+     */
+    public function classeByRating(): Response
+    {
+
+        $restaurants = $this->restaurantRepository->byRating();
+
+        if (!$restaurants)
+            throw $this->createNotFoundException('Aucun résultat');
+
+        return $this->render('restaurant/index.html.twig', [
+            'ControllerName' => "classer les restaurant pas vot",
+            'restaurants' => $restaurants,
+            'isForLimit' => true
         ]);
     }
 }

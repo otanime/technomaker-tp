@@ -47,4 +47,61 @@ class RestaurantRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function lastRestaurants(int $limit)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->orderBy('r.created_at', 'DESC')
+            ->setMaxResults($limit);
+
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+    public function ratingAvg(int $id){
+
+        $qb = $this->createQueryBuilder('r')
+            ->select('avg(re.rating) as rating')
+            ->innerJoin('r.reviews', 're')
+            ->where("r.id = $id")
+            ->orderBy('r.created_at', 'DESC');
+
+        $query = $qb->getQuery()->getSingleScalarResult();
+
+        return $query;
+
+    }
+
+    public function topRestaurant(int $limit){
+
+        $qb = $this->createQueryBuilder('r')
+            ->select('r')
+            ->innerJoin('r.reviews', 're')
+            ->groupBy('r.id')
+            ->orderBy('avg(re.rating)', 'DESC')
+            ->setMaxResults($limit);
+
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
+    }
+
+    public function byRating(){
+
+        $qb = $this->createQueryBuilder('r')
+            ->select('r')
+            ->leftJoin('r.reviews', 're')
+            ->groupBy('r.id')
+            ->orderBy('avg(re.rating)', 'DESC');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
+    }
 }
