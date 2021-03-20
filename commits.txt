@@ -1,0 +1,102 @@
+commit eec01b5334e9a70afd22c12dbb6394086c1f557c (HEAD -> master)
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Sat Mar 20 18:58:08 2021 +0100
+
+    Ajouter de script sql
+
+commit 2836376b827461a4da8e764680b2e62db4e7c39d
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Sat Mar 20 16:55:06 2021 +0100
+
+    reponse des question 11, 12, 13, 15, 16
+
+commit 33c4d10c0480ab3a5f2ff0473d9d3d3ef1323ed0
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 15:07:36 2021 +0100
+
+    L'ajout de Twig
+
+commit 56db4624e0828bcca72638d49c44e6d06b9c6a98
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 15:01:48 2021 +0100
+
+    Modification de nom des routes
+
+commit c9e9c62b8b4915d568c146f0bbb1e37dbebbcce6
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 14:31:01 2021 +0100
+
+    Implimenter les routes CRUD
+
+commit 2a182ad859016694d89dcf8d55214ce9376d30d1
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:37:03 2021 +0100
+
+    Generation city controller
+
+commit 9c1543ce0bc7875c7be0d96fc1eaf48bd2eccab1
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:36:21 2021 +0100
+
+    Generation review controller
+
+commit 63367668bafb500f47e13deeda73bdea03f6c78e
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:35:59 2021 +0100
+
+    Generation restaurant picture controller
+
+commit 796046a8b42348ce574b4ea228bcfafa88e5e64f
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:35:17 2021 +0100
+
+    Generation restaurant controller
+
+commit 1f279561e4104c8c2a6d14d77bb1078589d481be
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:34:09 2021 +0100
+
+    Generation user controller
+
+commit 701fcad7a1b71c84bba658b4cbe36b705485a7f4
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 11:21:17 2021 +0100
+
+    Creation la migration
+
+commit 74c737b28192ae7f23ce3f4c5a3f42e1d2bec7a1
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 10:56:25 2021 +0100
+
+    Affecter la valeur par default pour l'attribut <created_at> pour l'entite review
+
+commit 4b32c26e270fe8b27b3d907b135c1f7da3bdc3e5
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 10:17:53 2021 +0100
+
+    Affecter la valeur par default pour l'attribut <created_at>
+
+commit 13b1476a776e7cc3144d7d13686b98d1b0ba58c6
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 10:09:10 2021 +0100
+
+    Ajouter les relations entre les entities
+
+commit 1d3ee49d13f26eead8e14c1651ac3b8c71d81529
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 10:00:26 2021 +0100
+
+    Creation les entities et leurs repository
+
+commit 5faea19e9748c21e06bae4e8dd25c4865d3d8989
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 09:41:07 2021 +0100
+
+    Instalation Doctrine|ORM|Configuration et creation de DB
+
+commit 76235438567f70307bd112f8a3a7f274f2ebeb60
+Author: technomaker IDRISSI HASSANI ayoub <ybdrsshssn@gmail.com>
+Date:   Fri Mar 19 09:21:11 2021 +0100
+
+    Creation du projet
+(END)
